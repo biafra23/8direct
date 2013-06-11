@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">8Direct</string>
+    <string name="legal">About</string>
+    <string name="hello">Hallo</string>
+    <string name="lorem_ipsum">Hier ganz viel Blindtext</string>
+    <string name="autohack_toggle">New ToggleButton</string>
+    <string name="demo_collection">Demo collection</string>
+    <string name="demo_external_activity">external activity</string>
+    <string name="dummy_section_text">Dummy section text {1}</string>
+    <string name="drop_use_recycle">DropUseRecycle</string>
+
+    <string-array name="item_type_array">
+        <item>XMP-Burster</item>
+        <item>Resonator</item>
+        <item>PowerCube</item>
+        <item>Shield</item>
+    </string-array>
+
+    <string-array name="level_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
+    <string-array name="action_array">
+        <item>Drop</item>
+        <item>Recycle</item>
+        <!--<item>Use</item>-->
+
+    </string-array>
+</resources>
