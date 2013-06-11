@@ -36,6 +36,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
+                <version>${android.maven.plugin.version}</version>
                 <extensions>true</extensions>
             </plugin>
         </plugins>
@@ -95,6 +96,7 @@
                     <plugin>
                         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                         <artifactId>android-maven-plugin</artifactId>
+                        <version>${android.maven.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>zipalign-application-apk</id>
