@@ -18,3 +18,11 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+
+#idea project files
+.idea/
+*.iml
+
+#maven output directory
+
+target/
