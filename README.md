@@ -14,7 +14,7 @@ After a successful build you can find the apk in: 8direct/target/8direct-1.0-SNA
 Deploy and Run
 ==============
 
-mvn clean package android:deploy android:run
+cd 8direct; mvn clean package android:deploy android:run
 
 
 Robotium
