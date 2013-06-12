@@ -99,7 +99,7 @@ public class DirectionFragment extends Fragment {
             mPortals.setVisibility(View.GONE);
             mLongDirection.setTextColor(getActivity().getResources().getColor(R.color.text));
             mShortDirection.setTextColor(getActivity().getResources().getColor(R.color.text));
-            mContainer.setBackgroundColor(getActivity().getResources().getColor(R.color.card_background));
+            mContainer.setBackgroundResource(R.drawable.draw_bgbox_black);
             mActivateButton.setVisibility(View.VISIBLE);
             mDeactivateButton.setVisibility(View.GONE);
         }
