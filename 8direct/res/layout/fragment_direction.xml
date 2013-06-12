@@ -14,10 +14,10 @@
   limitations under the License.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/layout"
+                android:id="@+id/container"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/draw_bgbox_gradient"
+                android:background="@color/card_background"
         >
 
 
@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/portal_e"
             android:contentDescription="portals"
-
+            android:visibility="gone"
             android:layout_below="@+id/direction_short"
             android:layout_centerInParent="true"
             android:layout_above="@+id/underline"
@@ -66,16 +66,34 @@
             android:layout_height="wrap_content"
             android:src="@drawable/underline"
             android:contentDescription="divider"
-            android:layout_above="@+id/activate"
+            android:layout_above="@+id/buttonBar"
             />
 
-    <Button
-            android:id="@+id/activate"
-            android:layout_height="wrap_content"
+    <RelativeLayout
+            android:id="@+id/buttonBar"
             android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
-            android:text="Activate"
-            android:textAllCaps="true"
-            android:background="@null"
-            />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+        <Button
+                android:id="@+id/activate"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Activate"
+                android:textColor="@color/text_highlighted"
+                android:textAllCaps="true"
+                android:background="@null"
+                />
+
+        <Button
+                android:id="@+id/deactivate"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Deactivate"
+                android:textColor="@color/text_highlighted"
+                android:textAllCaps="true"
+                android:background="@null"
+                android:visibility="gone"
+                />
+    </RelativeLayout>
 </RelativeLayout>
