@@ -8,4 +8,8 @@
             name="card_margin_horizontal"
             >16dp
     </dimen>
+    <dimen
+            name="tab_indicator_height"
+            >6dip
+    </dimen>
 </resources>

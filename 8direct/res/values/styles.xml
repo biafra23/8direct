@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="DirectTheme" parent="android:Theme.Holo">
         <item name="android:windowBackground">@color/background</item>
+        <item name="android:actionBarTabBarStyle">@style/directActionBarTabStyle</item>
+        <item name="android:actionBarTabStyle">@style/directActionBarTabStyle</item>
     </style>
+
+    <style name="directActionBarTabStyle" parent="android:Widget.ActionBar.TabBar">
+        <item name="android:showDividers">middle</item>
+        <item name="android:divider">@color/background</item>
+    </style>
+
+    <style name="directActionBarTabStyle" parent="android:Widget.ActionBar.TabView">
+        <item name="android:background">@drawable/direction_tab</item>
+    </style>
+
 </resources>

@@ -4,4 +4,9 @@
     <color name="card_background">#000000</color>
     <color name="text_highlighted">#32b4e5</color>
     <color name="text">#FFFFFF</color>
+    <color name="text_30">#4CFFFFFF</color>
+    <color name="tab_indicator_unselected">#4CFFFFFF</color>
+    <color name="tab_indicator_selected">#FFFFFF</color>
+    <color name="tab_indicator_unselected_checked">#4C32b4e5</color>
+    <color name="tab_indicator_selected_checked">#32b4e5</color>
 </resources>
