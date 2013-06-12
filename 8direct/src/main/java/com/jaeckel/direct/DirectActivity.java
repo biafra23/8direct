@@ -16,8 +16,8 @@ import com.jaeckel.direct.fragments.DirectSlideFragment;
 public class DirectActivity extends FragmentActivity implements ActionBar.TabListener {
 
 
-    public final static String[] DIRECTIONS = new String[]{"E", "SE", "S", "SW", "W", "NW", "N", "NE"};
-    public final static String[] DIRECTIONS_LONG = new String[]{"East", "Southeast", "South", "Southwest", "West", "Northwest", "North", "Northeast"};
+    public static String[] mDirections;
+    public static String[] mDirectionsLong;
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -32,7 +32,8 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mDirections = getResources().getStringArray(R.array.short_directions);
+        mDirectionsLong = getResources().getStringArray(R.array.long_directions);
 
         setContentView(R.layout.activity_direct);
 
@@ -101,7 +102,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
      */
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
 
-        Log.d(App.TAG, "Direction: " + DIRECTIONS[tab.getPosition()] + " selected");
+        Log.d(App.TAG, "Direction: " + mDirections[tab.getPosition()] + " selected");
 
 
         mViewPager.setCurrentItem(tab.getPosition());

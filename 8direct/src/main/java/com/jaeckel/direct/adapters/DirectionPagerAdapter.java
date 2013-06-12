@@ -8,19 +8,22 @@ import android.util.Log;
 
 import com.jaeckel.direct.App;
 import com.jaeckel.direct.DirectActivity;
+import com.jaeckel.direct.R;
 import com.jaeckel.direct.fragments.DirectionFragment;
 
 /**
  * Created by quirijngb on 12/06/2013.
  */
 public class DirectionPagerAdapter  extends FragmentPagerAdapter {
+
     public DirectionPagerAdapter(FragmentManager fm) {
         super(fm);
+
     }
 
     @Override
     public Fragment getItem(int i) {
-        return getFragment(DirectActivity.DIRECTIONS[i], DirectActivity.DIRECTIONS_LONG[i]);
+        return getFragment(DirectActivity.mDirections[i], DirectActivity.mDirectionsLong[i]);
     }
 
     private Fragment getFragment(String direction, String description) {
@@ -40,6 +43,6 @@ public class DirectionPagerAdapter  extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "" + (DirectActivity.DIRECTIONS[position]);
+        return "" + (DirectActivity.mDirections[position]);
     }
 }

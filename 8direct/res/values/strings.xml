@@ -9,6 +9,30 @@
     <string name="demo_external_activity">external activity</string>
     <string name="dummy_section_text">Dummy section text {1}</string>
     <string name="drop_use_recycle">DropUseRecycle</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="activate">Activate</string>
+
+    <string-array name="short_directions">
+        <item>E</item>
+        <item>SE</item>
+        <item>S</item>
+        <item>SW</item>
+        <item>W</item>
+        <item>NW</item>
+        <item>N</item>
+        <item>NE</item>
+    </string-array>
+
+    <string-array name="long_directions">
+        <item>East</item>
+        <item>SouthEast</item>
+        <item>South</item>
+        <item>SouthWest</item>
+        <item>West</item>
+        <item>NorthWest</item>
+        <item>North</item>
+        <item>NorthEast</item>
+    </string-array>
 
     <string-array name="item_type_array">
         <item>XMP-Burster</item>

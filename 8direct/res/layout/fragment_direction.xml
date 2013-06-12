@@ -51,7 +51,7 @@
                 android:layout_alignParentTop="true"
                 android:gravity="center"
                 android:textSize="200sp"
-                android:text="NW"
+                android:text="@string/nw"
                 android:textAllCaps="true"
                 />
 
@@ -66,7 +66,7 @@
                 android:layout_alignRight="@+id/direction_short"
                 android:layout_below="@+id/direction_short"
                 android:layout_marginTop="-32dp"
-                android:text="North"
+                android:text="@string/north"
                 />
 
         <ImageView
@@ -88,7 +88,7 @@
                     android:id="@+id/activate"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:text="Activate"
+                    android:text="@string/activate"
                     android:textColor="@color/text_highlighted"
                     android:textAllCaps="true"
                     android:background="@null"
@@ -98,7 +98,7 @@
                     android:id="@+id/deactivate"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:text="Deactivate"
+                    android:text="@string/deactivate"
                     android:textColor="@color/text_highlighted"
                     android:textAllCaps="true"
                     android:background="@null"
