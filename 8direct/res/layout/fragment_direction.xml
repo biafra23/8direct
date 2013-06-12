@@ -26,7 +26,7 @@
             android:layout_marginLeft="@dimen/card_margin_horizontal"
             android:layout_marginRight="@dimen/card_margin_horizontal"
             android:id="@+id/container"
-            android:background="@color/card_background"
+            android:background="@drawable/draw_bgbox_black"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
@@ -51,7 +51,7 @@
                 android:layout_alignParentTop="true"
                 android:gravity="center"
                 android:textSize="200sp"
-                android:text="@string/nw"
+                android:text="NW"
                 android:textAllCaps="true"
                 />
 
@@ -66,7 +66,7 @@
                 android:layout_alignRight="@+id/direction_short"
                 android:layout_below="@+id/direction_short"
                 android:layout_marginTop="-32dp"
-                android:text="@string/north"
+                android:text="north"
                 />
 
         <ImageView
