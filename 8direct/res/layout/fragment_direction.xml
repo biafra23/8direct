@@ -13,60 +13,69 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:padding="0dip"
-              android:background="@drawable/draw_bgbox_gradient"
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/layout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/draw_bgbox_gradient"
         >
+
+
+    <ImageView
+            android:id="@+id/portals"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/portal_e"
+            android:contentDescription="portals"
+
+            android:layout_below="@+id/direction_short"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/underline"
+            />
 
 
     <TextView
             android:id="@+id/direction_short"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
             android:gravity="center"
-            android:textSize="160sp"
-            android:text="N"
+            android:textSize="200sp"
+            android:text="NW"
+            android:textAllCaps="true"
             />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/layout"
-                  android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
 
-            >
-        <ImageView android:id="@+id/portals"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:src="@drawable/portal_e"
-                   android:contentDescription="portals"
-
-                />
-
-        <TextView
-                android:id="@+id/direction_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:text="North"
-
-                />
-    </LinearLayout>
-    <ImageView android:id="@+id/underline"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:src="@drawable/underline"
-               android:contentDescription="divider"
+    <TextView
+            android:id="@+id/direction_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textAllCaps="true"
+            android:layout_marginLeft="16dp"
+            android:layout_alignRight="@+id/direction_short"
+            android:layout_below="@+id/direction_short"
+            android:layout_marginTop="-32dp"
+            android:text="North"
             />
 
-    <Button android:id="@+id/activate"
+    <ImageView
+            android:id="@+id/underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/underline"
+            android:contentDescription="divider"
+            android:layout_above="@+id/activate"
+            />
+
+    <Button
+            android:id="@+id/activate"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
             android:text="Activate"
+            android:textAllCaps="true"
+            android:background="@null"
             />
-</LinearLayout>
+</RelativeLayout>

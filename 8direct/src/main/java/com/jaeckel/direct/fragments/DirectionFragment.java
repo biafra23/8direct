@@ -1,5 +1,6 @@
 package com.jaeckel.direct.fragments;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,16 +26,24 @@ public class DirectionFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_direction, container, false);
         Bundle args = getArguments();
+
+
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),
+                "fonts/Roboto-Light.ttf");
+
+
         final String string = args.getString(ARG_SECTION_DIRECTION);
         Log.d(App.TAG, "String: " + string);
-        ((TextView) rootView.findViewById(R.id.direction_short)).setText(string);
+        TextView shortDirection = (TextView) rootView.findViewById(R.id.direction_short);
+        shortDirection.setTypeface(tf);
+        shortDirection.setText(string);
 
-        ((TextView) rootView.findViewById(R.id.direction_description)).setText(args.getString(ARG_SECTION_DIRECTION_LONG));
+        TextView longDirection = (TextView) rootView.findViewById(R.id.direction_description);
+        longDirection.setText(args.getString(ARG_SECTION_DIRECTION_LONG));
 
         ImageView portals = (ImageView) rootView.findViewById(R.id.portals);
         if ("sw".equalsIgnoreCase(string)) {
             portals.setOnClickListener(new View.OnClickListener() {
-                @Override
                 public void onClick(View v) {
                     Log.d(App.TAG, "sw clicked");
                 }

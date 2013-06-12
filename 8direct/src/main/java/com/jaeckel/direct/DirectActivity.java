@@ -2,15 +2,10 @@ package com.jaeckel.direct;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.*;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.jaeckel.direct.adapters.DirectionPagerAdapter;
 import com.jaeckel.direct.fragments.DirectSlideFragment;
@@ -39,7 +34,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
         super.onCreate(savedInstanceState);
 
 
-        setContentView(R.layout.direct_main);
+        setContentView(R.layout.activity_direct);
 
         Log.d(App.TAG, "DirectActivity");
 
