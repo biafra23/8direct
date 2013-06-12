@@ -14,86 +14,96 @@
   limitations under the License.
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/container"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/card_background"
+                android:background="@null"
         >
 
 
-    <ImageView
-            android:id="@+id/portals"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/portal_e"
-            android:contentDescription="portals"
-            android:visibility="gone"
-            android:layout_below="@+id/direction_short"
-            android:layout_centerInParent="true"
-            android:layout_above="@+id/underline"
-            />
-
-
-    <TextView
-            android:id="@+id/direction_short"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:gravity="center"
-            android:textSize="200sp"
-            android:text="NW"
-            android:textAllCaps="true"
-            />
-
-
-    <TextView
-            android:id="@+id/direction_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textAllCaps="true"
-            android:layout_marginLeft="16dp"
-            android:layout_alignRight="@+id/direction_short"
-            android:layout_below="@+id/direction_short"
-            android:layout_marginTop="-32dp"
-            android:text="North"
-            />
-
-    <ImageView
-            android:id="@+id/underline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/underline"
-            android:contentDescription="divider"
-            android:layout_above="@+id/buttonBar"
-            />
-
     <RelativeLayout
-            android:id="@+id/buttonBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_marginTop="@dimen/card_margin_vertical"
+            android:layout_marginBottom="@dimen/card_margin_vertical"
+            android:layout_marginLeft="@dimen/card_margin_horizontal"
+            android:layout_marginRight="@dimen/card_margin_horizontal"
+            android:id="@+id/container"
+            android:background="@color/card_background"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-        <Button
-                android:id="@+id/activate"
-                android:layout_height="wrap_content"
+        <ImageView
+                android:id="@+id/portals"
                 android:layout_width="match_parent"
-                android:text="Activate"
-                android:textColor="@color/text_highlighted"
-                android:textAllCaps="true"
-                android:background="@null"
-                />
-
-        <Button
-                android:id="@+id/deactivate"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:text="Deactivate"
-                android:textColor="@color/text_highlighted"
-                android:textAllCaps="true"
-                android:background="@null"
+                android:layout_height="match_parent"
+                android:src="@drawable/portal_e"
+                android:contentDescription="portals"
                 android:visibility="gone"
+                android:layout_below="@+id/direction_short"
+                android:layout_centerInParent="true"
+                android:layout_above="@+id/underline"
                 />
+
+
+        <TextView
+                android:id="@+id/direction_short"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:textSize="200sp"
+                android:text="NW"
+                android:textAllCaps="true"
+                />
+
+
+        <TextView
+                android:id="@+id/direction_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textAllCaps="true"
+                android:layout_marginLeft="16dp"
+                android:layout_alignRight="@+id/direction_short"
+                android:layout_below="@+id/direction_short"
+                android:layout_marginTop="-32dp"
+                android:text="North"
+                />
+
+        <ImageView
+                android:id="@+id/underline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/underline"
+                android:contentDescription="divider"
+                android:layout_above="@+id/buttonBar"
+                />
+
+        <RelativeLayout
+                android:id="@+id/buttonBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+            <Button
+                    android:id="@+id/activate"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Activate"
+                    android:textColor="@color/text_highlighted"
+                    android:textAllCaps="true"
+                    android:background="@null"
+                    />
+
+            <Button
+                    android:id="@+id/deactivate"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Deactivate"
+                    android:textColor="@color/text_highlighted"
+                    android:textAllCaps="true"
+                    android:background="@null"
+                    android:visibility="gone"
+                    />
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
