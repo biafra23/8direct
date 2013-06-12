@@ -9,7 +9,8 @@
 
     <application android:icon="@drawable/ic_launcher"
                  android:label="@string/app_name"
-                 android:name=".App">
+                 android:name=".App"
+                 android:theme="@style/DirectTheme">
 
         <activity android:name=".DirectActivity">
             <intent-filter>
