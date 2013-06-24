@@ -1,158 +1,188 @@
 package com.jaeckel.direct;
 
 import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.support.v4.app.*;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.jaeckel.direct.adapters.DirectionPagerAdapter;
-import com.jaeckel.direct.fragments.DirectSlideFragment;
+import com.jaeckel.direct.nfc.DistributionNfc;
+import com.jaeckel.direct.nfc.DistributionNfc.NfcPayloadCallback;
 
-/**
- * Created by flashmop on 16.05.13.
- */
-public class DirectActivity extends FragmentActivity implements ActionBar.TabListener {
+public class DirectActivity extends FragmentActivity implements ActionBar.TabListener, NfcPayloadCallback, DirectionHolder
+{
 
+   /**
+    * <code>MIME_TYPE</code> indicates/is used for.
+    */
+   private static final String NFC_MIME_TYPE = "application/vdn.com.jaeckel.direct.distribute";
+   private static final String TAG = "DirectActivity";
+   private static final String EXTRA_ACTIVATED = "EXTRA_ACTIVATED";
+   private ViewPager viewPager;
+   private DirectionPagerAdapter directionPagerAdapter;
+   private boolean[] activated;
 
-    public static String[] mDirections;
-    public static String[] mDirectionsLong;
+   @Override
+   protected void onCreate(Bundle savedInstanceState)
+   {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_direct);
 
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
-    private ViewPager mViewPager;
-    /**
-     * The pager adapter, which provides the pages to the view pager widget.
-     */
-    private DirectionPagerAdapter mDirectionPagerAdapter;
+      Log.d(App.TAG, "DirectActivity");
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mDirections = getResources().getStringArray(R.array.short_directions);
-        mDirectionsLong = getResources().getStringArray(R.array.long_directions);
+      Intent intent = getIntent();
+      if (intent.hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES))
+      {
+         boolean[] payload = (boolean[]) DistributionNfc.readNfcMessage(intent, NFC_MIME_TYPE);
+         activated = payload;
+      }
+      else if (savedInstanceState != null)
+      {
+         activated = savedInstanceState.getBooleanArray(EXTRA_ACTIVATED);
+      }
+      else
+      {
+         activated = new boolean[8];
+      }
+      directionPagerAdapter = new DirectionPagerAdapter(getSupportFragmentManager(), getResources());
 
-        setContentView(R.layout.activity_direct);
+      final ActionBar actionBar = getActionBar();
+      actionBar.setHomeButtonEnabled(false);
+      actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.color_1a1a1a));
+      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        Log.d(App.TAG, "DirectActivity");
-
-        // Create the adapter that will return a fragment for each of the three primary sections
-        // of the app.
-        mDirectionPagerAdapter = new DirectionPagerAdapter(getSupportFragmentManager());
-
-        // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-
-        // Specify that the Home/Up button should not be enabled, since there is no hierarchical
-        // parent.
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.color_1a1a1a));
-        // Specify that we will be displaying tabs in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Set up the ViewPager, attaching the adapter and setting up a listener for when the
-        // user swipes between sections.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mDirectionPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+      viewPager = (ViewPager) findViewById(R.id.pager);
+      viewPager.setAdapter(directionPagerAdapter);
+      viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
+         {
             @Override
-            public void onPageSelected(int position) {
-                // When swiping between different app sections, select the corresponding tab.
-                // We can also use ActionBar.Tab#select() to do this if we have a reference to the
-                // Tab.
-                actionBar.setSelectedNavigationItem(position);
+            public void onPageSelected(int position)
+            {
+               actionBar.setSelectedNavigationItem(position);
             }
-        });
+         });
+      for (int i = 0; i < directionPagerAdapter.getCount(); i++)
+      {
+         actionBar.addTab(actionBar.newTab().setText(directionPagerAdapter.getPageTitle(i)).setTabListener(this));
+      }
 
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mDirectionPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by the adapter.
-            // Also specify this Activity object, which implements the TabListener interface, as the
-            // listener for when this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mDirectionPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
-    }
+      DistributionNfc.registerNfcMessageCallback(this, NFC_MIME_TYPE, this);
+   }
 
-    @Override
-    public void onBackPressed() {
-        if (mViewPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-        }
-    }
+   @Override
+   protected void onSaveInstanceState(Bundle outState)
+   {
+      super.onSaveInstanceState(outState);
+      outState.putBooleanArray(EXTRA_ACTIVATED, activated);
+   }
 
-    /**
-     * Called when a tab enters the selected state.
-     *
-     * @param tab The tab that was selected
-     * @param ft  A {@link android.app.FragmentTransaction} for queuing fragment operations to execute
-     *            during a tab switch. The previous tab's unselect and this tab's select will be
-     *            executed in a single transaction. This FragmentTransaction does not support
-     *            being added to the back stack.
-     */
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+   @Override
+   public void onBackPressed()
+   {
+      if (viewPager.getCurrentItem() == 0)
+      {
+         super.onBackPressed();
+      }
+      else
+      {
+         viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+      }
+   }
 
-        Log.d(App.TAG, "Direction: " + mDirections[tab.getPosition()] + " selected");
+   public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft)
+   {
+      viewPager.setCurrentItem(tab.getPosition());
+   }
 
+   @Override
+   public void onTabReselected(Tab tab, FragmentTransaction ft)
+   {
+      // NOOP
+   }
 
-        mViewPager.setCurrentItem(tab.getPosition());
+   @Override
+   public void onTabUnselected(Tab tab, FragmentTransaction ft)
+   {
+      // NOOP
+   }
 
-    }
+   @Override
+   public Object getPayload()
+   {
+      return activated;
+   }
 
-    /**
-     * Called when a tab exits the selected state.
-     *
-     * @param tab The tab that was unselected
-     * @param ft  A {@link android.app.FragmentTransaction} for queuing fragment operations to execute
-     *            during a tab switch. This tab's unselect and the newly selected tab's select
-     *            will be executed in a single transaction. This FragmentTransaction does not
-     *            support being added to the back stack.
-     */
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+   @Override
+   public boolean isActivated(String direction)
+   {
+      int field = directionToInt(direction);
+      return activated[field];
+   }
 
-    /**
-     * Called when a tab that is already selected is chosen again by the user.
-     * Some applications may use this action to return to the top level of a category.
-     *
-     * @param tab The tab that was reselected.
-     * @param ft  A {@link android.app.FragmentTransaction} for queuing fragment operations to execute
-     *            once this method returns. This FragmentTransaction does not support
-     *            being added to the back stack.
-     */
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+   @Override
+   public void setActivated(String direction, boolean state)
+   {
+      int field = directionToInt(direction);
+      activated[field] = state;
+   }
 
-    /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
-     */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+   private int directionToInt(String direction)
+   {
+      if ("n".equalsIgnoreCase(direction))
+      {
 
-        @Override
-        public Fragment getItem(int position) {
-            return new DirectSlideFragment();
-        }
+         return 0;
 
-        @Override
-        public int getCount() {
-            return mDirectionPagerAdapter.getCount();
-        }
-    }
+      }
+      else if ("e".equalsIgnoreCase(direction))
+      {
+
+         return 1;
+
+      }
+      else if ("s".equalsIgnoreCase(direction))
+      {
+
+         return 2;
+
+      }
+      else if ("w".equalsIgnoreCase(direction))
+      {
+
+         return 3;
+
+      }
+      else if ("ne".equalsIgnoreCase(direction))
+      {
+         return 4;
+
+      }
+      else if ("sw".equalsIgnoreCase(direction))
+      {
+         return 5;
+
+      }
+      else if ("nw".equalsIgnoreCase(direction))
+      {
+         return 6;
+
+      }
+      else if ("se".equalsIgnoreCase(direction))
+      {
+         return 7;
+
+      }
+      else
+      {
+         Log.e(TAG, "Not a valid direction " + direction);
+         return -1;
+
+      }
+   }
 
 }

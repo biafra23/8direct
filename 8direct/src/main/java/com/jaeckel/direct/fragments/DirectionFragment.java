@@ -1,5 +1,6 @@
 package com.jaeckel.direct.fragments;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,131 +13,195 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jaeckel.direct.App;
+import com.jaeckel.direct.DirectionHolder;
 import com.jaeckel.direct.R;
 
 /**
  * Created by quirijngb on 12/06/2013.
  */
-public class DirectionFragment extends Fragment {
-    public static final String ARG_SECTION_DIRECTION = "section_code";
-    public static final String ARG_SECTION_DIRECTION_LONG = "section_description";
-    private boolean activated = false;
-    private ImageView mPortals;
-    private TextView mLongDirection;
-    private TextView mShortDirection;
-    private View mContainer;
-    private Button mActivateButton;
-    private Button mDeactivateButton;
+public class DirectionFragment extends Fragment
+{
+   public static final String ARG_SECTION_DIRECTION = "section_code";
+   public static final String ARG_SECTION_DIRECTION_LONG = "section_description";
+   private DirectionHolder directionListener;
+   private String direction;
+   private String longDirection;
 
+   @Override
+   public void onAttach(Activity activity)
+   {
+      super.onAttach(activity);
+      directionListener = (DirectionHolder) activity;
+   }
 
-    public boolean isActivated() {
-        return activated;
-    }
+   static public Fragment newInstance(String direction, String description)
+   {
+      DirectionFragment f = new DirectionFragment();
+      Bundle args = new Bundle();
+      args.putString(DirectionFragment.ARG_SECTION_DIRECTION, direction);
+      args.putString(DirectionFragment.ARG_SECTION_DIRECTION_LONG, description);
+      f.setArguments(args);
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-        updateView();
-    }
+      return f;
+   }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+   @Override
+   public void onCreate(Bundle savedInstanceState)
+   {
+      super.onCreate(savedInstanceState);
 
-        View rootView = inflater.inflate(R.layout.fragment_direction, container, false);
-        Bundle args = getArguments();
+      Bundle args = getArguments();
+      direction = args.getString(ARG_SECTION_DIRECTION);
+      longDirection = args.getString(ARG_SECTION_DIRECTION_LONG);
+   }
 
+   @Override
+   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+   {
 
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),
-                "fonts/Roboto-Light.ttf");
+      View rootView = inflater.inflate(R.layout.fragment_direction, container, false);
 
+      Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
 
-        final String string = args.getString(ARG_SECTION_DIRECTION);
-        Log.d(App.TAG, "String: " + string);
+      Log.d(App.TAG, "String: " + direction);
 
-        mContainer = rootView.findViewById(R.id.container);
+      TextView mShortDirection = (TextView) rootView.findViewById(R.id.direction_short);
+      TextView mLongDirection = (TextView) rootView.findViewById(R.id.direction_description);
+      ImageView mPortals = (ImageView) rootView.findViewById(R.id.portals);
+      Button mActivateButton = (Button) rootView.findViewById(R.id.activate);
+      Button mDeactivateButton = (Button) rootView.findViewById(R.id.deactivate);
 
-        mShortDirection = (TextView) rootView.findViewById(R.id.direction_short);
-        mShortDirection.setTypeface(tf);
-        mShortDirection.setText(string);
+      mShortDirection.setTypeface(tf);
+      mShortDirection.setText(direction);
 
-        mLongDirection = (TextView) rootView.findViewById(R.id.direction_description);
-        mLongDirection.setText(args.getString(ARG_SECTION_DIRECTION_LONG));
+      mLongDirection.setText(longDirection);
 
-        mPortals = (ImageView) rootView.findViewById(R.id.portals);
-        if ("sw".equalsIgnoreCase(string)) {
-            mPortals.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Log.d(App.TAG, "sw clicked");
-                }
+      if ("sw".equalsIgnoreCase(direction))
+      {
+         mPortals.setOnClickListener(new View.OnClickListener()
+            {
+               public void onClick(View v)
+               {
+                  Log.d(App.TAG, "sw clicked");
+               }
             });
-        }
-        mPortals.setImageResource(getDirectionImage(string));
+      }
+      mPortals.setImageResource(getDirectionImage(direction));
 
-        mActivateButton = (Button) rootView.findViewById(R.id.activate);
-        mActivateButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                setActivated(true);
+      mActivateButton.setOnClickListener(new View.OnClickListener()
+         {
+            public void onClick(View view)
+            {
+               setActivated(true);
             }
-        });
-        mDeactivateButton = (Button) rootView.findViewById(R.id.deactivate);
-        mDeactivateButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                setActivated(false);
+         });
+      mDeactivateButton.setOnClickListener(new View.OnClickListener()
+         {
+            public void onClick(View view)
+            {
+               setActivated(false);
             }
-        });
-        return rootView;
-    }
+         });
+      return rootView;
+   }
 
-    private void updateView() {
-        if (activated) {
-            mPortals.setVisibility(View.VISIBLE);
-            mLongDirection.setTextColor(getActivity().getResources().getColor(R.color.text_highlighted));
-            mShortDirection.setTextColor(getActivity().getResources().getColor(R.color.text_highlighted));
-            mContainer.setBackgroundResource(R.drawable.draw_bgbox_gradient);
-            mDeactivateButton.setVisibility(View.VISIBLE);
-            mActivateButton.setVisibility(View.GONE);
-        } else {
-            mPortals.setVisibility(View.GONE);
-            mLongDirection.setTextColor(getActivity().getResources().getColor(R.color.text));
-            mShortDirection.setTextColor(getActivity().getResources().getColor(R.color.text));
-            mContainer.setBackgroundResource(R.drawable.draw_bgbox_black);
-            mActivateButton.setVisibility(View.VISIBLE);
-            mDeactivateButton.setVisibility(View.GONE);
-        }
-    }
+   @Override
+   public void onViewCreated(View view, Bundle savedInstanceState)
+   {
+      super.onViewCreated(view, savedInstanceState);
+      updateView();
+   }
 
-    private int getDirectionImage(String direction) {
-        if ("n".equalsIgnoreCase(direction)) {
+   public boolean isActivated()
+   {
+      return directionListener.isActivated(direction);
+   }
 
-            return R.drawable.portal_n;
+   public void setActivated(boolean activated)
+   {
+      directionListener.setActivated(direction, activated);
+      updateView();
+   }
 
-        } else if ("e".equalsIgnoreCase(direction)) {
+   private void updateView()
+   {
+      View rootView = getView();
+      ImageView mPortals = (ImageView) rootView.findViewById(R.id.portals);
+      TextView mShortDirection = (TextView) rootView.findViewById(R.id.direction_short);
+      TextView mLongDirection = (TextView) rootView.findViewById(R.id.direction_description);
+      Button mActivateButton = (Button) rootView.findViewById(R.id.activate);
+      Button mDeactivateButton = (Button) rootView.findViewById(R.id.deactivate);
+      View mContainer = rootView.findViewById(R.id.container);
+      if (isActivated())
+      {
+         mPortals.setVisibility(View.VISIBLE);
+         mLongDirection.setTextColor(getActivity().getResources().getColor(R.color.text_highlighted));
+         mShortDirection.setTextColor(getActivity().getResources().getColor(R.color.text_highlighted));
+         mContainer.setBackgroundResource(R.drawable.draw_bgbox_gradient);
+         mDeactivateButton.setVisibility(View.VISIBLE);
+         mActivateButton.setVisibility(View.GONE);
+      }
+      else
+      {
+         mPortals.setVisibility(View.GONE);
+         mLongDirection.setTextColor(getActivity().getResources().getColor(R.color.text));
+         mShortDirection.setTextColor(getActivity().getResources().getColor(R.color.text));
+         mContainer.setBackgroundResource(R.drawable.draw_bgbox_black);
+         mActivateButton.setVisibility(View.VISIBLE);
+         mDeactivateButton.setVisibility(View.GONE);
+      }
+   }
 
-            return R.drawable.portal_e;
+   private int getDirectionImage(String direction)
+   {
+      if ("n".equalsIgnoreCase(direction))
+      {
 
-        } else if ("s".equalsIgnoreCase(direction)) {
+         return R.drawable.portal_n;
 
-            return R.drawable.portal_s;
+      }
+      else if ("e".equalsIgnoreCase(direction))
+      {
 
-        } else if ("w".equalsIgnoreCase(direction)) {
+         return R.drawable.portal_e;
 
-            return R.drawable.portal_w;
+      }
+      else if ("s".equalsIgnoreCase(direction))
+      {
 
-        } else if ("ne".equalsIgnoreCase(direction)) {
-            return R.drawable.portal_ne;
+         return R.drawable.portal_s;
 
-        } else if ("sw".equalsIgnoreCase(direction)) {
-            return R.drawable.portal_sw;
+      }
+      else if ("w".equalsIgnoreCase(direction))
+      {
 
-        } else if ("nw".equalsIgnoreCase(direction)) {
-            return R.drawable.portal_nw;
+         return R.drawable.portal_w;
 
-        } else if ("se".equalsIgnoreCase(direction)) {
-            return R.drawable.portal_se;
+      }
+      else if ("ne".equalsIgnoreCase(direction))
+      {
+         return R.drawable.portal_ne;
 
-        } else {
-            return R.drawable.portal_n;
+      }
+      else if ("sw".equalsIgnoreCase(direction))
+      {
+         return R.drawable.portal_sw;
 
-        }
-    }
+      }
+      else if ("nw".equalsIgnoreCase(direction))
+      {
+         return R.drawable.portal_nw;
+
+      }
+      else if ("se".equalsIgnoreCase(direction))
+      {
+         return R.drawable.portal_se;
+
+      }
+      else
+      {
+         return R.drawable.portal_n;
+
+      }
+   }
 }
