@@ -146,6 +146,14 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
             activated[i] = false;
          }
       }
+      runOnUiThread(new Runnable()
+         {
+            @Override
+            public void run()
+            {
+               directionPagerAdapter.notifyDataSetChanged();
+            }
+         });
    }
 
    @Override

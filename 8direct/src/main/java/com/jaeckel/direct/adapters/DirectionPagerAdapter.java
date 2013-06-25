@@ -27,6 +27,12 @@ public class DirectionPagerAdapter extends FragmentPagerAdapter
    }
 
    @Override
+   public int getItemPosition(Object object)
+   {
+      return POSITION_NONE;
+   }
+
+   @Override
    public Fragment getItem(int i)
    {
       Fragment fragment = DirectionFragment.newInstance(mDirections[i], mDirectionsLong[i]);
