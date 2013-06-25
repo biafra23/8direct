@@ -43,27 +43,8 @@ public class DistributionNfc
 
    }
 
-   private static NdefMessage createMessage(Activity ctx, String mimeType, Object payload)
-   {
-      NdefMessage ndefMessage = null;
-      try
-      {
-         NdefRecord aaRecord = NdefRecord.createApplicationRecord(ctx.getPackageName());
-         byte[] mimeData = DistributionNfc.serialize(payload);
-         byte[] typeBytes = mimeType.getBytes("US-ASCII");
-         NdefRecord mimeRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, typeBytes, null, mimeData);
-
-         ndefMessage = new NdefMessage(new NdefRecord[] { mimeRecord, aaRecord });
-      }
-      catch (IOException e)
-      {
-         Log.e(TAG, "Failed to register NfcMessage", e);
-      }
-      return ndefMessage;
-   }
-
    @TargetApi(14)
-   public static void registerNfcMessageCallback(Activity activity, String mimeType, NfcPayloadCallback callback)
+   public static void registerNfcMessageCallback(Activity activity, String mimeType, NfcPayloadCallback contentSupllier)
    {
       if (Build.VERSION.SDK_INT < 14)
          return; // To old a SDK version
@@ -71,7 +52,9 @@ public class DistributionNfc
       if (nfcAdapter == null)
          return; // NFC not available on this device
 
-      nfcAdapter.setNdefPushMessageCallback(new CreateNdefMessageCallback(activity, mimeType, callback), activity);
+      CreateNdefMessageCallback callbacks = new CreateNdefMessageCallback(activity, mimeType, contentSupllier);
+      nfcAdapter.setNdefPushMessageCallback(callbacks, activity);
+      nfcAdapter.setOnNdefPushCompleteCallback(callbacks, activity);
    }
 
    @TargetApi(14)
@@ -102,7 +85,26 @@ public class DistributionNfc
       return null;
    }
 
-   public static byte[] serialize(Object obj)
+   private static NdefMessage createMessage(Activity ctx, String mimeType, Object payload)
+   {
+      NdefMessage ndefMessage = null;
+      try
+      {
+         NdefRecord aaRecord = NdefRecord.createApplicationRecord(ctx.getPackageName());
+         byte[] mimeData = DistributionNfc.serialize(payload);
+         byte[] typeBytes = mimeType.getBytes("US-ASCII");
+         NdefRecord mimeRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, typeBytes, null, mimeData);
+
+         ndefMessage = new NdefMessage(new NdefRecord[] { mimeRecord, aaRecord });
+      }
+      catch (IOException e)
+      {
+         Log.e(TAG, "Failed to register NfcMessage", e);
+      }
+      return ndefMessage;
+   }
+
+   private static byte[] serialize(Object obj)
    {
       ByteArrayOutputStream b = new ByteArrayOutputStream();
       ObjectOutputStream o;
@@ -120,7 +122,7 @@ public class DistributionNfc
       return bytes;
    }
 
-   public static Object deserialize(byte[] bytes)
+   private static Object deserialize(byte[] bytes)
    {
       ByteArrayInputStream b = new ByteArrayInputStream(bytes);
       ObjectInputStream o;
@@ -145,18 +147,14 @@ public class DistributionNfc
       return object;
    }
 
-   private static class CreateNdefMessageCallback implements NfcAdapter.CreateNdefMessageCallback
+   private static class CreateNdefMessageCallback implements NfcAdapter.CreateNdefMessageCallback, NfcAdapter.OnNdefPushCompleteCallback
    {
 
       private NfcPayloadCallback callback;
       private String mimeType;
       private WeakReference<Activity> activityRef;
+      public Object payload;
 
-      /**
-       * Constructor: create a new CreateNdefMessageCallback.
-       * 
-       * @param callback
-       */
       public CreateNdefMessageCallback(Activity activity, String mimeType, NfcPayloadCallback callback)
       {
          this.activityRef = new WeakReference<Activity>(activity);
@@ -171,14 +169,23 @@ public class DistributionNfc
          NdefMessage message = null;
          if (activity != null)
          {
-            message = createMessage(activity, mimeType, callback.getPayload());
+            payload = callback.preparePayload();
+            message = createMessage(activity, mimeType, payload);
          }
          return message;
+      }
+
+      @Override
+      public void onNdefPushComplete(NfcEvent event)
+      {
+         callback.didTransferPayload(payload);
       }
    }
 
    public interface NfcPayloadCallback
    {
-      Object getPayload();
+      Object preparePayload();
+
+      void didTransferPayload(Object payload);
    }
 }

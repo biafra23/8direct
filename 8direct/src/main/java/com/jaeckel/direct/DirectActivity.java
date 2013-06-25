@@ -112,9 +112,40 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
    }
 
    @Override
-   public Object getPayload()
+   public Object preparePayload()
    {
-      return activated;
+      boolean[] payload = new boolean[activated.length];
+      boolean myturn = true;
+      for (int i = 0; i < activated.length; i++)
+      {
+         if (activated[i])
+         {
+            if (myturn)
+            {
+               payload[i] = false;
+            }
+            else
+            {
+               payload[i] = true;
+            }
+            myturn = !myturn;
+         }
+      }
+      Log.d(TAG, "From my " + activated + " sharing " + payload);
+      return payload;
+   }
+
+   @Override
+   public void didTransferPayload(Object payload)
+   {
+      boolean[] given = (boolean[]) payload;
+      for (int i = 0; i < given.length; i++)
+      {
+         if (given[i] && activated[i])
+         {
+            activated[i] = false;
+         }
+      }
    }
 
    @Override
@@ -136,13 +167,13 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       if ("n".equalsIgnoreCase(direction))
       {
 
-         return 0;
+         return 6;
 
       }
       else if ("e".equalsIgnoreCase(direction))
       {
 
-         return 1;
+         return 0;
 
       }
       else if ("s".equalsIgnoreCase(direction))
@@ -154,27 +185,27 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       else if ("w".equalsIgnoreCase(direction))
       {
 
-         return 3;
+         return 4;
 
       }
       else if ("ne".equalsIgnoreCase(direction))
       {
-         return 4;
+         return 7;
 
       }
       else if ("sw".equalsIgnoreCase(direction))
       {
-         return 5;
+         return 3;
 
       }
       else if ("nw".equalsIgnoreCase(direction))
       {
-         return 6;
+         return 5;
 
       }
       else if ("se".equalsIgnoreCase(direction))
       {
-         return 7;
+         return 1;
 
       }
       else
