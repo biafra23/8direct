@@ -16,7 +16,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/DirectTheme" >
-        <activity android:name=".DirectActivity" >
+        <activity android:name=".DirectActivity" 
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
