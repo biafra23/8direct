@@ -1,16 +1,21 @@
 package com.jaeckel.direct;
 
+import java.util.Arrays;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jaeckel.direct.adapters.DirectionPagerAdapter;
+import com.jaeckel.direct.fragments.DirectionFragment;
 import com.jaeckel.direct.nfc.DistributionNfc;
 import com.jaeckel.direct.nfc.DistributionNfc.NfcPayloadCallback;
 
@@ -23,9 +28,11 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
    private static final String NFC_MIME_TYPE = "application/vdn.com.jaeckel.direct.distribute";
    private static final String TAG = "DirectActivity";
    private static final String EXTRA_ACTIVATED = "EXTRA_ACTIVATED";
+   private static final String EXTRA_ASSIGNED = "EXTRA_ASSIGNED";
    private ViewPager viewPager;
    private DirectionPagerAdapter directionPagerAdapter;
-   private boolean[] activated;
+   private boolean[] activated = new boolean[8];;
+   private boolean[] assigned = new boolean[8];;
 
    @Override
    protected void onCreate(Bundle savedInstanceState)
@@ -39,17 +46,25 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       if (intent.hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES))
       {
          boolean[] payload = (boolean[]) DistributionNfc.readNfcMessage(intent, NFC_MIME_TYPE);
-         activated = payload;
+         activated = new boolean[8];
+         assigned = payload;
       }
       else if (savedInstanceState != null)
       {
          activated = savedInstanceState.getBooleanArray(EXTRA_ACTIVATED);
+         assigned = savedInstanceState.getBooleanArray(EXTRA_ASSIGNED);
       }
       else
       {
          activated = new boolean[8];
+         assigned = new boolean[8];
+         for (int i = 0; i < assigned.length; i++)
+         {
+            assigned[i] = true;
+         }
       }
-      directionPagerAdapter = new DirectionPagerAdapter(getSupportFragmentManager(), getResources());
+      Log.d(TAG, "onCreate: " + toString());
+      directionPagerAdapter = new DirectionPagerAdapter(getSupportFragmentManager(), getResources(), this);
 
       final ActionBar actionBar = getActionBar();
       actionBar.setHomeButtonEnabled(false);
@@ -79,6 +94,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
    {
       super.onSaveInstanceState(outState);
       outState.putBooleanArray(EXTRA_ACTIVATED, activated);
+      outState.putBooleanArray(EXTRA_ASSIGNED, assigned);
    }
 
    @Override
@@ -114,53 +130,55 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
    @Override
    public Object preparePayload()
    {
-      boolean[] payload = new boolean[activated.length];
-      boolean myturn = true;
-      for (int i = 0; i < activated.length; i++)
+      boolean[] payload = new boolean[assigned.length];
+      boolean transfer = false;
+      for (int i = 0; i < assigned.length; i++)
       {
-         if (activated[i])
+         if (assigned[i])
          {
-            if (myturn)
-            {
-               payload[i] = false;
-            }
-            else
-            {
-               payload[i] = true;
-            }
-            myturn = !myturn;
+            payload[i] = transfer;
+            transfer = !transfer;
          }
       }
-      Log.d(TAG, "From my " + activated + " sharing " + payload);
+      Log.d(TAG, "My current: " + Arrays.toString(assigned));
+      Log.d(TAG, "My shared : " + Arrays.toString(payload));
       return payload;
    }
 
    @Override
    public void didTransferPayload(Object payload)
    {
-      boolean[] given = (boolean[]) payload;
-      for (int i = 0; i < given.length; i++)
-      {
-         if (given[i] && activated[i])
-         {
-            activated[i] = false;
-         }
-      }
+      final boolean[] shared = (boolean[]) payload;
       runOnUiThread(new Runnable()
          {
             @Override
             public void run()
             {
-               directionPagerAdapter.notifyDataSetChanged();
+               int sharedTotal = 0;
+               for (int i = 0; i < assigned.length; i++)
+               {
+                  if (shared[i])
+                  {
+                     sharedTotal++;
+                     assigned[i] = false;
+                  }
+
+                  final Fragment fragment = directionPagerAdapter.getFragment(i);
+                  if (fragment != null && fragment instanceof DirectionFragment)
+                  {
+                     ((DirectionFragment) fragment).notifyDataSetChanged();
+                  }
+               }
+               Toast.makeText(DirectActivity.this, getString(R.string.toast_shared, sharedTotal), Toast.LENGTH_LONG).show();
+               Log.d(TAG, "didTransferPayload: " + DirectActivity.this.toString());
             }
          });
    }
 
    @Override
-   public boolean isActivated(String direction)
+   public String toString()
    {
-      int field = directionToInt(direction);
-      return activated[field];
+      return "DirectActivity [activated=" + Arrays.toString(activated) + ", assigned=" + Arrays.toString(assigned) + "]";
    }
 
    @Override
@@ -170,57 +188,71 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       activated[field] = state;
    }
 
+   @Override
+   public boolean isActivated(String direction)
+   {
+      int field = directionToInt(direction);
+      return isActivated(field);
+   }
+
+   @Override
+   public boolean isActivated(int position)
+   {
+      return activated[position];
+   }
+
+   @Override
+   public boolean isAssignedToMe(String direction)
+   {
+      int field = directionToInt(direction);
+      return isAssignedToMe(field);
+   }
+
+   @Override
+   public boolean isAssignedToMe(int position)
+   {
+      return assigned[position];
+   }
+
    private int directionToInt(String direction)
    {
-      if ("n".equalsIgnoreCase(direction))
+      if ("e".equalsIgnoreCase(direction))
       {
-
-         return 6;
-
-      }
-      else if ("e".equalsIgnoreCase(direction))
-      {
-
          return 0;
-
+      }
+      else if ("se".equalsIgnoreCase(direction))
+      {
+         return 1;
       }
       else if ("s".equalsIgnoreCase(direction))
       {
-
          return 2;
-
+      }
+      else if ("sw".equalsIgnoreCase(direction))
+      {
+         return 3;
       }
       else if ("w".equalsIgnoreCase(direction))
       {
-
          return 4;
+      }
+      else if ("nw".equalsIgnoreCase(direction))
+      {
+         return 5;
+      }
+      else if ("n".equalsIgnoreCase(direction))
+      {
+         return 6;
 
       }
       else if ("ne".equalsIgnoreCase(direction))
       {
          return 7;
-
-      }
-      else if ("sw".equalsIgnoreCase(direction))
-      {
-         return 3;
-
-      }
-      else if ("nw".equalsIgnoreCase(direction))
-      {
-         return 5;
-
-      }
-      else if ("se".equalsIgnoreCase(direction))
-      {
-         return 1;
-
       }
       else
       {
          Log.e(TAG, "Not a valid direction " + direction);
          return -1;
-
       }
    }
 

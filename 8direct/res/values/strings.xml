@@ -11,6 +11,7 @@
     <string name="drop_use_recycle">DropUseRecycle</string>
     <string name="deactivate">Deactivate</string>
     <string name="activate">Activate</string>
+    <string name="toast_shared">Shared %d octants through Beam</string>
 
     <string-array name="short_directions">
         <item>E</item>
