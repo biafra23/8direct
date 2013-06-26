@@ -12,6 +12,8 @@
     <string name="deactivate">Deactivate</string>
     <string name="activate">Activate</string>
     <string name="toast_shared">Shared %d octants through Beam</string>
+    <string name="reset_activations">Next</string>
+    <string name="reset_assignment">Clear assignments</string>
 
     <string-array name="short_directions">
         <item>E</item>

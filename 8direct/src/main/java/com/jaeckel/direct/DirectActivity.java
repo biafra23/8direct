@@ -12,6 +12,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.jaeckel.direct.adapters.DirectionPagerAdapter;
@@ -108,6 +110,53 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       {
          viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
       }
+   }
+
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu)
+   {
+      getMenuInflater().inflate(R.menu.reset, menu);
+      return super.onCreateOptionsMenu(menu);
+   }
+
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item)
+   {
+      boolean consumed;
+      switch (item.getItemId())
+      {
+         case R.id.menu_reset_activations:
+            for (int i = 0; i < assigned.length; i++)
+            {
+               if (assigned[i])
+               {
+                  activated[i] = false;
+                  final Fragment fragment = directionPagerAdapter.getFragment(i);
+                  if (fragment != null && fragment instanceof DirectionFragment)
+                  {
+                     ((DirectionFragment) fragment).notifyDataSetChanged();
+                  }
+               }
+            }
+            consumed = true;
+            break;
+         case R.id.menu_reset_assignment:
+            for (int i = 0; i < assigned.length; i++)
+            {
+               assigned[i] = true;
+               final Fragment fragment = directionPagerAdapter.getFragment(i);
+               if (fragment != null && fragment instanceof DirectionFragment)
+               {
+                  ((DirectionFragment) fragment).notifyDataSetChanged();
+               }
+            }
+            consumed = true;
+            break;
+         default:
+            consumed = super.onOptionsItemSelected(item);
+            break;
+      }
+      return consumed;
    }
 
    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft)
