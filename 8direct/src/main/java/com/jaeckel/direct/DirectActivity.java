@@ -14,10 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.jaeckel.direct.adapters.DirectionPagerAdapter;
+import com.jaeckel.direct.event.ClearDirectionEvent;
 import com.jaeckel.direct.fragments.DirectionFragment;
 import com.jaeckel.direct.nfc.DistributionNfc;
 import com.jaeckel.direct.nfc.DistributionNfc.NfcPayloadCallback;
 import com.jaeckel.direct.util.DirectionHelper;
+import de.greenrobot.event.EventBus;
 
 import java.util.Arrays;
 
@@ -32,11 +34,15 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
     private ViewPager viewPager;
     private DirectionPagerAdapter directionPagerAdapter;
     private static boolean[] assigned = new boolean[8];
-
+    private EventBus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bus = new EventBus().getDefault();
+        bus.register(this);
+
         setContentView(R.layout.activity_direct);
 
         Log.d(App.TAG, "DirectActivity");
@@ -230,6 +236,17 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
         return assigned[position];
     }
 
+    /**
+     * Called by EventBus
+     * @param event
+     */
+    public void onEvent(ClearDirectionEvent event) {
 
+        Log.d(App.TAG, "event." + event.getDirection());
+
+        App.getInstance().getActivated()[event.getDirection()] = false;
+
+
+    }
 
 }

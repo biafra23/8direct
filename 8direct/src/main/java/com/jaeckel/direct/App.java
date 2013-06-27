@@ -1,6 +1,7 @@
 package com.jaeckel.direct;
 
 import android.app.Application;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author flashmop
@@ -13,11 +14,15 @@ public class App extends Application {
     private static App instance;
     private boolean[] activated = new boolean[8];
 
+    EventBus bus;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+//        bus = new EventBus().getDefault();
+//        bus.register(this);
     }
 
     public static App getInstance() {

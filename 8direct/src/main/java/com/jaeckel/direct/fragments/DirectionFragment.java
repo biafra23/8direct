@@ -1,11 +1,9 @@
 package com.jaeckel.direct.fragments;
 
-import android.app.*;
-import android.content.Intent;
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +14,10 @@ import android.widget.TextView;
 import com.jaeckel.direct.App;
 import com.jaeckel.direct.DirectionHolder;
 import com.jaeckel.direct.R;
+import com.jaeckel.direct.event.ClearDirectionEvent;
 import com.jaeckel.direct.util.DirectionHelper;
 import com.jaeckel.direct.util.NotificationHelper;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by quirijngb on 12/06/2013.
@@ -28,6 +28,7 @@ public class DirectionFragment extends Fragment {
     private DirectionHolder directionListener;
     private String direction;
     private String longDirection;
+    private EventBus bus;
 
     @Override
     public void onAttach(Activity activity) {
@@ -48,6 +49,9 @@ public class DirectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bus = new EventBus().getDefault();
+        bus.register(this);
 
         Bundle args = getArguments();
         direction = args.getString(ARG_SECTION_DIRECTION);
@@ -99,6 +103,7 @@ public class DirectionFragment extends Fragment {
         directionListener.setActivated(direction, activated);
         updateView();
         NotificationHelper.raiseNotification(direction, activated);
+
     }
 
     public void notifyDataSetChanged() {
@@ -144,7 +149,19 @@ public class DirectionFragment extends Fragment {
         }
     }
 
+    /**
+     * Called by EventBus
+     *
+     * @param event
+     */
+    public void onEvent(ClearDirectionEvent event) {
 
+        Log.d(App.TAG, "event." + event.getDirection());
+        if (event.getDirection() == DirectionHelper.directionToInt(direction)) {
+            setActivated(false);
 
+        }
+
+    }
 
 }

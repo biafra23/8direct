@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import com.jaeckel.direct.event.ClearDirectionEvent;
 import com.jaeckel.direct.util.DirectionHelper;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author flashmop
@@ -19,6 +20,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        EventBus bus = EventBus.getDefault();
 
         Log.d(App.TAG, "NotificationReceiver.onReceive: " + intent);
 
@@ -31,8 +33,10 @@ public class NotificationReceiver extends BroadcastReceiver {
                 Log.d(App.TAG, "clearDirection: " + clearDirection);
 
 
-                App.getInstance().getActivated()[DirectionHelper.directionToInt(clearDirection)] = false;
+                final int i = DirectionHelper.directionToInt(clearDirection);
 
+                App.getInstance().getActivated()[i] = false;
+                bus.post(new ClearDirectionEvent(i));
 //                if (clearDirection != null) {
 //                    Toast.makeText(this, "clearDirection: " + clearDirection, Toast.LENGTH_SHORT).show();
 //                }
