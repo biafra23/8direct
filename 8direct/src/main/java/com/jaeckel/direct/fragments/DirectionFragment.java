@@ -76,16 +76,6 @@ public class DirectionFragment extends Fragment
 
       mLongDirection.setText(longDirection);
 
-      if ("sw".equalsIgnoreCase(direction))
-      {
-         mPortals.setOnClickListener(new View.OnClickListener()
-            {
-               public void onClick(View v)
-               {
-                  Log.d(App.TAG, "sw clicked");
-               }
-            });
-      }
       mPortals.setImageResource(getDirectionImage(direction));
 
       mActivateButton.setOnClickListener(new View.OnClickListener()
@@ -112,14 +102,14 @@ public class DirectionFragment extends Fragment
       updateView();
    }
 
-   public boolean isActivated()
-   {
-      return directionListener.isActivated(direction);
-   }
-
    public void setActivated(boolean activated)
    {
       directionListener.setActivated(direction, activated);
+      updateView();
+   }
+
+   public void notifyDataSetChanged()
+   {
       updateView();
    }
 
@@ -132,13 +122,21 @@ public class DirectionFragment extends Fragment
       Button mActivateButton = (Button) rootView.findViewById(R.id.activate);
       Button mDeactivateButton = (Button) rootView.findViewById(R.id.deactivate);
       View mContainer = rootView.findViewById(R.id.container);
-      if (isActivated())
+      if (directionListener.isActivated(direction))
       {
          mPortals.setVisibility(View.VISIBLE);
          mLongDirection.setTextColor(getActivity().getResources().getColor(R.color.text_highlighted));
          mShortDirection.setTextColor(getActivity().getResources().getColor(R.color.text_highlighted));
          mContainer.setBackgroundResource(R.drawable.draw_bgbox_gradient);
-         mDeactivateButton.setVisibility(View.VISIBLE);
+
+         if (directionListener.isAssignedToMe(direction))
+         {
+            mDeactivateButton.setVisibility(View.VISIBLE);
+         }
+         else
+         {
+            mDeactivateButton.setVisibility(View.INVISIBLE);
+         }
          mActivateButton.setVisibility(View.GONE);
       }
       else
@@ -147,8 +145,23 @@ public class DirectionFragment extends Fragment
          mLongDirection.setTextColor(getActivity().getResources().getColor(R.color.text));
          mShortDirection.setTextColor(getActivity().getResources().getColor(R.color.text));
          mContainer.setBackgroundResource(R.drawable.draw_bgbox_black);
-         mActivateButton.setVisibility(View.VISIBLE);
+         if (directionListener.isAssignedToMe(direction))
+         {
+            mActivateButton.setVisibility(View.VISIBLE);
+         }
+         else
+         {
+            mActivateButton.setVisibility(View.INVISIBLE);
+         }
          mDeactivateButton.setVisibility(View.GONE);
+      }
+      if (directionListener.isAssignedToMe(direction))
+      {
+         getView().setAlpha(1.0F);
+      }
+      else
+      {
+         getView().setAlpha(0.5F);
       }
    }
 
