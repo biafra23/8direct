@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_reset_activations"
+        android:showAsAction="ifRoom"
+        android:title="@string/reset_activations"/>
+    <item
+        android:id="@+id/menu_reset_assignment"
+        android:showAsAction="never"
+        android:title="@string/reset_assignment"/>
+
+</menu>
