@@ -130,4 +130,28 @@ public class DirectionHelper {
             return -1;
         }
     }
+
+    public static String directionToString(int direction) {
+        if (0 == direction) {
+            return "e";
+        } else if (1 == direction) {
+            return "se";
+        } else if (2 == direction) {
+            return "s";
+        } else if (3 == direction) {
+            return "sw";
+        } else if (4 == direction) {
+            return "w";
+        } else if (5 == direction) {
+            return "nw";
+        } else if (6 == direction) {
+            return "n";
+        } else if (7 == direction) {
+
+            return "ne";
+        } else {
+            Log.e(App.TAG, "Not a valid direction " + direction);
+            return "<>";
+        }
+    }
 }

@@ -16,6 +16,7 @@ import com.jaeckel.direct.NotificationReceiver;
  */
 public class NotificationHelper {
 
+
     public static void raiseNotification(String direction, boolean activated) {
 
         if (activated) {

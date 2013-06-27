@@ -10,8 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 import com.jaeckel.direct.adapters.DirectionPagerAdapter;
 import com.jaeckel.direct.event.ClearDirectionEvent;
@@ -19,6 +17,7 @@ import com.jaeckel.direct.fragments.DirectionFragment;
 import com.jaeckel.direct.nfc.DistributionNfc;
 import com.jaeckel.direct.nfc.DistributionNfc.NfcPayloadCallback;
 import com.jaeckel.direct.util.DirectionHelper;
+import com.jaeckel.direct.util.NotificationHelper;
 import de.greenrobot.event.EventBus;
 
 import java.util.Arrays;
@@ -51,15 +50,25 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
         if (intent.hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)) {
             boolean[] payload = (boolean[]) DistributionNfc.readNfcMessage(intent, NFC_MIME_TYPE);
             App.getInstance().setActivated(new boolean[8]);
-            assigned = payload;
+//            assigned = payload;
+            App.getInstance().setActivated(payload);
+            for (int i = 0; i < payload.length; i++) {
+
+                NotificationHelper.raiseNotification(DirectionHelper.directionToString(i), payload[i]);
+
+            }
+
+
         } else if (savedInstanceState != null) {
             App.getInstance().setActivated(savedInstanceState.getBooleanArray(EXTRA_ACTIVATED));
-            assigned = savedInstanceState.getBooleanArray(EXTRA_ASSIGNED);
+//            assigned = savedInstanceState.getBooleanArray(EXTRA_ASSIGNED);
+
         } else {
             App.getInstance().setActivated(new boolean[8]);
             assigned = new boolean[8];
             for (int i = 0; i < assigned.length; i++) {
                 assigned[i] = true;
+
             }
         }
         Log.d(App.TAG, "onCreate: " + toString());
@@ -111,44 +120,6 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.reset, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean consumed;
-        switch (item.getItemId()) {
-            case R.id.menu_reset_activations:
-                for (int i = 0; i < assigned.length; i++) {
-                    if (assigned[i]) {
-                        App.getInstance().getActivated()[i] = false;
-                        final Fragment fragment = directionPagerAdapter.getFragment(i);
-                        if (fragment != null && fragment instanceof DirectionFragment) {
-                            ((DirectionFragment) fragment).notifyDataSetChanged();
-                        }
-                    }
-                }
-                consumed = true;
-                break;
-            case R.id.menu_reset_assignment:
-                for (int i = 0; i < assigned.length; i++) {
-                    assigned[i] = true;
-                    final Fragment fragment = directionPagerAdapter.getFragment(i);
-                    if (fragment != null && fragment instanceof DirectionFragment) {
-                        ((DirectionFragment) fragment).notifyDataSetChanged();
-                    }
-                }
-                consumed = true;
-                break;
-            default:
-                consumed = super.onOptionsItemSelected(item);
-                break;
-        }
-        return consumed;
-    }
 
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
         viewPager.setCurrentItem(tab.getPosition());
@@ -189,7 +160,11 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
                 for (int i = 0; i < assigned.length; i++) {
                     if (shared[i]) {
                         sharedTotal++;
-                        assigned[i] = false;
+//                        assigned[i] = false;
+                    } else {
+                        App.getInstance().getActivated()[i] = true;
+                        NotificationHelper.raiseNotification(DirectionHelper.directionToString(i), true);
+
                     }
 
                     final Fragment fragment = directionPagerAdapter.getFragment(i);
@@ -238,6 +213,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
 
     /**
      * Called by EventBus
+     *
      * @param event
      */
     public void onEvent(ClearDirectionEvent event) {
