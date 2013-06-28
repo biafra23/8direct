@@ -37,6 +37,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
@@ -48,53 +49,125 @@
     </build>
 
     <profiles>
+        <!--<profile>-->
+        <!--<id>sign</id>-->
+        <!--<build>-->
+        <!--<plugins>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-jarsigner-plugin</artifactId>-->
+        <!--<version>1.2</version>-->
+        <!--<executions>-->
+        <!--<execution>-->
+        <!--<id>signing</id>-->
+        <!--<goals>-->
+        <!--<goal>sign</goal>-->
+        <!--</goals>-->
+        <!--<phase>package</phase>-->
+        <!--<inherited>true</inherited>-->
+        <!--<configuration>-->
+        <!--<archiveDirectory/>-->
+        <!--<includes>-->
+        <!--<include>target/*.apk</include>-->
+        <!--</includes>-->
+        <!--<keystore>${com.jaeckel.8direct.keystore}</keystore>-->
+        <!--<alias>${com.jaeckel.8direct.alias}</alias>-->
+        <!--<storepass>${com.jaeckel.8direct.storepass}</storepass>-->
+        <!--<keypass>${com.jaeckel.8direct.keypass}</keypass>-->
+        <!--<arguments>-->
+        <!--<argument>-sigalg</argument>-->
+        <!--<argument>SHA1withRSA</argument>-->
+        <!--<argument>-digestalg</argument>-->
+        <!--<argument>SHA1</argument>-->
+        <!--</arguments>-->
+        <!--</configuration>-->
+        <!--</execution>-->
+        <!--</executions>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>com.jayway.maven.plugins.android.generation2</groupId>-->
+        <!--<artifactId>android-maven-plugin</artifactId>-->
+        <!--<version>${android.maven.plugin.version}</version>-->
+        <!--<inherited>true</inherited>-->
+        <!--<configuration>-->
+        <!--<sign>-->
+        <!--<debug>false</debug>-->
+        <!--</sign>-->
+        <!--</configuration>-->
+        <!--</plugin>-->
+        <!--</plugins>-->
+        <!--</build>-->
+        <!--</profile>-->
         <profile>
             <id>release</id>
             <build>
+
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/filteredRes/default/</directory>
+                        <targetPath>${project.basedir}/res</targetPath>
+                        <filtering>false</filtering>
+                        <includes>
+                            <include>**/*.png</include>
+                        </includes>
+                    </resource>
+                </resources>
                 <plugins>
                     <plugin>
-                        <groupId>com.pyx4me</groupId>
-                        <artifactId>proguard-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>buildnumber-maven-plugin</artifactId>
+                        <version>1.2</version>
                         <executions>
                             <execution>
-                                <id>process-classes-with-proguard</id>
-                                <phase>process-classes</phase>
+                                <phase>validate</phase>
                                 <goals>
-                                    <goal>proguard</goal>
+                                    <goal>create</goal>
+                                    <!--<goal>create-timestamp</goal>-->
                                 </goals>
-                                <configuration>
-                                    <proguardVersion>4.4</proguardVersion>
-                                    <maxMemory>256m</maxMemory>
-                                    <injar>classes</injar>
-                                    <libs>
-                                        <lib>${rt.jar.path}</lib>
-                                        <lib>${jsse.jar.path}</lib>
-                                    </libs>
-                                    <obfuscate>true</obfuscate>
-                                    <addMavenDescriptor>false</addMavenDescriptor>
-                                    <proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
-                                </configuration>
                             </execution>
                         </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>net.sf.proguard</groupId>
-                                <artifactId>proguard</artifactId>
-                                <version>4.4</version>
-                                <scope>runtime</scope>
-                            </dependency>
-                        </dependencies>
+                        <configuration>
+                            <doCheck>true</doCheck>
+                            <doUpdate>true</doUpdate>
+                            <shortRevisionLength>5</shortRevisionLength>
+                        </configuration>
                     </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>sign</id>
+            <build>
+                <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>1.2</version>
                         <executions>
                             <execution>
-                                <id>sign-application-apk</id>
-                                <phase>package</phase>
+                                <id>signing</id>
                                 <goals>
                                     <goal>sign</goal>
-                                    <goal>verify</goal>
                                 </goals>
+                                <phase>package</phase>
+                                <inherited>true</inherited>
+                                <configuration>
+                                    <archiveDirectory/>
+                                    <includes>
+                                        <include>target/*.apk</include>
+                                    </includes>
+                                    <keystore>${com.jaeckel.8direct.keystore}</keystore>
+                                    <alias>${com.jaeckel.8direct.alias}</alias>
+                                    <storepass>${com.jaeckel.8direct.storepass}</storepass>
+                                    <keypass>${com.jaeckel.8direct.keypass}</keypass>
+                                    <arguments>
+                                        <argument>-sigalg</argument>
+                                        <argument>SHA1withDSA</argument>
+                                        <argument>-digestalg</argument>
+                                        <argument>SHA1</argument>
+                                    </arguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -102,9 +175,20 @@
                         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                         <artifactId>android-maven-plugin</artifactId>
                         <version>${android.maven.plugin.version}</version>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <sign>
+                                <debug>false</debug>
+                            </sign>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <version>${android.maven.plugin.version}</version>
                         <executions>
                             <execution>
-                                <id>zipalign-application-apk</id>
+                                <id>align-application-apk</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>zipalign</goal>
@@ -114,39 +198,16 @@
                         <configuration>
                             <release>true</release>
                             <zipalign>
+                                <skip>false</skip>
                                 <verbose>true</verbose>
-                                <inputApk>${project.build.directory}/${project.artifactId}-${project.version}.apk
-                                </inputApk>
-                                <outputApk>
-                                    ${project.build.directory}/${project.artifactId}-${project.version}-signed-aligned.apk
+                                <inputApk>${project.build.directory}/${project.build.finalName}.apk</inputApk>
+                                <outputApk>${project.build.directory}/${project.build.finalName}-signed-aligned.apk
                                 </outputApk>
                             </zipalign>
                             <sign>
                                 <debug>false</debug>
                             </sign>
                         </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>${project.build.directory}/proguard_map.txt</file>
-                                    <type>map</type>
-                                    <classifier>release</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>attach-signed-aligned</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>attach-artifact</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
