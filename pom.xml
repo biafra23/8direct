@@ -11,7 +11,7 @@
 
     <modules>
         <module>8direct</module>
-        <module>8direct-it</module>
+        <!--<module>8direct-it</module>-->
     </modules>
 
     <properties>
