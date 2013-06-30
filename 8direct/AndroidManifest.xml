@@ -6,6 +6,10 @@
 
     <uses-permission android:name="android.permission.NFC" />
 
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
@@ -16,8 +20,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/DirectTheme" >
-        <activity android:name=".DirectActivity" 
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".DirectActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +36,8 @@
                 <data android:mimeType="application/vdn.com.jaeckel.direct.distribute" />
             </intent-filter>
         </activity>
-        <receiver android:name=".NotificationReceiver">
+
+        <receiver android:name=".NotificationReceiver" >
         </receiver>
     </application>
 
