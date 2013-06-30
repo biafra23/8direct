@@ -17,7 +17,7 @@ public class DirectionHelperTest {
 
 
     @Test
-    public void shouldReturnResource() {
+    public void shouldReturnDrawableResource() {
 
         int result = DirectionHelper.getDirectionImage("n");
         assertThat(result, equalTo(R.drawable.portal_n));
@@ -34,6 +34,41 @@ public class DirectionHelperTest {
         result = DirectionHelper.getDirectionImage("s");
         assertThat(result, equalTo(R.drawable.portal_s));
 
+        result = DirectionHelper.getDirectionImage("sw");
+        assertThat(result, equalTo(R.drawable.portal_sw));
 
+        result = DirectionHelper.getDirectionImage("w");
+        assertThat(result, equalTo(R.drawable.portal_w));
+
+        result = DirectionHelper.getDirectionImage("nw");
+        assertThat(result, equalTo(R.drawable.portal_nw));
+    }
+
+    @Test
+    public void shouldReturnIconResource() {
+
+        int result = DirectionHelper.getDirectionIcon("n");
+        assertThat(result, equalTo(R.drawable.ic_stat_n));
+
+        result = DirectionHelper.getDirectionImage("ne");
+        assertThat(result, equalTo(R.drawable.ic_stat_ne));
+
+        result = DirectionHelper.getDirectionImage("e");
+        assertThat(result, equalTo(R.drawable.ic_stat_e));
+
+        result = DirectionHelper.getDirectionImage("se");
+        assertThat(result, equalTo(R.drawable.ic_stat_se));
+
+        result = DirectionHelper.getDirectionImage("s");
+        assertThat(result, equalTo(R.drawable.ic_stat_s));
+
+        result = DirectionHelper.getDirectionImage("sw");
+        assertThat(result, equalTo(R.drawable.ic_stat_sw));
+
+        result = DirectionHelper.getDirectionImage("w");
+        assertThat(result, equalTo(R.drawable.ic_stat_w));
+
+        result = DirectionHelper.getDirectionImage("nw");
+        assertThat(result, equalTo(R.drawable.ic_stat_nw));
     }
 }
