@@ -17,6 +17,7 @@
     <properties>
         <platform.version>4.1.1.4</platform.version>
         <android.maven.plugin.version>3.6.0</android.maven.plugin.version>
+        <dagger.version>1.0.1</dagger.version>
 
     </properties>
 
