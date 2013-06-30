@@ -4,6 +4,7 @@ import com.jaeckel.direct.R;
 import com.jaeckel.direct.testrunner.FilteredRobolectricRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.annotation.Config;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -15,61 +16,63 @@ import static org.junit.Assert.assertThat;
 @RunWith(FilteredRobolectricRunner.class)
 public class DirectionHelperTest {
 
-        @Test
-        public void shouldReturnDrawableResource() {
+    @Test
+    @Config(qualifiers = "xhdpi")
+    public void shouldReturnImageResource() {
 
-            int result = DirectionHelper.getDirectionImage("n");
-            assertThat(result, equalTo(R.drawable.portal_n));
+        int result = DirectionHelper.getDirectionImage("n");
+        assertThat(result, equalTo(R.drawable.portal_n));
 
-            result = DirectionHelper.getDirectionImage("ne");
-            assertThat(result, equalTo(R.drawable.portal_ne));
+        result = DirectionHelper.getDirectionImage("ne");
+        assertThat(result, equalTo(R.drawable.portal_ne));
 
-            result = DirectionHelper.getDirectionImage("e");
-            assertThat(result, equalTo(R.drawable.portal_e));
+        result = DirectionHelper.getDirectionImage("e");
+        assertThat(result, equalTo(R.drawable.portal_e));
 
-            result = DirectionHelper.getDirectionImage("se");
-            assertThat(result, equalTo(R.drawable.portal_se));
+        result = DirectionHelper.getDirectionImage("se");
+        assertThat(result, equalTo(R.drawable.portal_se));
 
-            result = DirectionHelper.getDirectionImage("s");
-            assertThat(result, equalTo(R.drawable.portal_s));
+        result = DirectionHelper.getDirectionImage("s");
+        assertThat(result, equalTo(R.drawable.portal_s));
 
-            result = DirectionHelper.getDirectionImage("sw");
-            assertThat(result, equalTo(R.drawable.portal_sw));
+        result = DirectionHelper.getDirectionImage("sw");
+        assertThat(result, equalTo(R.drawable.portal_sw));
 
-            result = DirectionHelper.getDirectionImage("w");
-            assertThat(result, equalTo(R.drawable.portal_w));
+        result = DirectionHelper.getDirectionImage("w");
+        assertThat(result, equalTo(R.drawable.portal_w));
 
-            result = DirectionHelper.getDirectionImage("nw");
-            assertThat(result, equalTo(R.drawable.portal_nw));
-        }
+        result = DirectionHelper.getDirectionImage("nw");
+        assertThat(result, equalTo(R.drawable.portal_nw));
+    }
 
-        @Test
-        public void shouldReturnIconResource() {
+    @Test
+    @Config(qualifiers = "xhdpi")
+    public void shouldReturnIconResource() {
 
-            int result = DirectionHelper.getDirectionIcon("n");
-            assertThat(result, equalTo(R.drawable.ic_stat_n));
+        int result = DirectionHelper.getDirectionIcon("n");
+        assertThat(result, equalTo(R.drawable.ic_stat_n));
 
-            result = DirectionHelper.getDirectionImage("ne");
-            assertThat(result, equalTo(R.drawable.ic_stat_ne));
+        result = DirectionHelper.getDirectionIcon("ne");
+        assertThat(result, equalTo(R.drawable.ic_stat_ne));
 
-            result = DirectionHelper.getDirectionImage("e");
-            assertThat(result, equalTo(R.drawable.ic_stat_e));
+        result = DirectionHelper.getDirectionIcon("e");
+        assertThat(result, equalTo(R.drawable.ic_stat_e));
 
-            result = DirectionHelper.getDirectionImage("se");
-            assertThat(result, equalTo(R.drawable.ic_stat_se));
+        result = DirectionHelper.getDirectionIcon("se");
+        assertThat(result, equalTo(R.drawable.ic_stat_se));
 
-            result = DirectionHelper.getDirectionImage("s");
-            assertThat(result, equalTo(R.drawable.ic_stat_s));
+        result = DirectionHelper.getDirectionIcon("s");
+        assertThat(result, equalTo(R.drawable.ic_stat_s));
 
-            result = DirectionHelper.getDirectionImage("sw");
-            assertThat(result, equalTo(R.drawable.ic_stat_sw));
+        result = DirectionHelper.getDirectionIcon("sw");
+        assertThat(result, equalTo(R.drawable.ic_stat_sw));
 
-            result = DirectionHelper.getDirectionImage("w");
-            assertThat(result, equalTo(R.drawable.ic_stat_w));
+        result = DirectionHelper.getDirectionIcon("w");
+        assertThat(result, equalTo(R.drawable.ic_stat_w));
 
-            result = DirectionHelper.getDirectionImage("nw");
-            assertThat(result, equalTo(R.drawable.ic_stat_nw));
-        }
+        result = DirectionHelper.getDirectionIcon("nw");
+        assertThat(result, equalTo(R.drawable.ic_stat_nw));
+    }
 
 
 }
