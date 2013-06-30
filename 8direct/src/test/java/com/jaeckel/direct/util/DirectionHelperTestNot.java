@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
  * @date 30.06.13 15:30
  */
 @RunWith(FilteredRobolectricRunner.class)
-public class DirectionHelperTest {
+public class DirectionHelperTestNot {
 
 
     @Test
