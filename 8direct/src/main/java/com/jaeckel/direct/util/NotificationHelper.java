@@ -23,7 +23,7 @@ public class NotificationHelper {
             NotificationCompat.Builder b = new NotificationCompat.Builder(App.getInstance());
             b.setAutoCancel(false).setDefaults(Notification.DEFAULT_ALL)
                     .setWhen(System.currentTimeMillis());
-            b.setContentTitle("Your direction is " + direction)
+            b.setContentTitle("Your direction is " + DirectionHelper.getLongDirection(direction))
                     .setContentText("Deploy your resonator here")
                     .setSmallIcon(DirectionHelper.getDirectionIcon(direction));
             Intent outbound = openActivityIntent(direction);
