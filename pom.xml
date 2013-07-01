@@ -91,7 +91,32 @@
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                     </configuration>
                 </plugin>
-
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <configuration>
+                        <skip>false</skip>
+                        <instrumentation>
+                            <excludes>
+                                <exclude>android/support/**/*.class</exclude>
+                                <exclude>com/actionbarsherlock/**/*.class</exclude>
+                                <exclude>com/sumup/**/*.class</exclude>
+                            </excludes>
+                        </instrumentation>
+                        <check>
+                            <totalLineRate>60</totalLineRate>
+                            <haltOnFailure>false</haltOnFailure>
+                        </check>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>cobertura</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -151,5 +176,10 @@
             </properties>
         </profile>
     </profiles>
-
+    <repositories>
+        <repository>
+            <id>jaeckel-3rd-party</id>
+            <url>http://nexus.jaeckel.com:8081/nexus/content/repositories/thirdparty</url>
+        </repository>
+    </repositories>
 </project>
