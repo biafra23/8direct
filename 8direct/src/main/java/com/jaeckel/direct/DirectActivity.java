@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.jaeckel.direct.adapters.DirectionPagerAdapter;
 import com.jaeckel.direct.event.ClearDirectionEvent;
 import com.jaeckel.direct.fragments.DirectionFragment;
@@ -18,9 +19,10 @@ import com.jaeckel.direct.nfc.DistributionNfc;
 import com.jaeckel.direct.nfc.DistributionNfc.NfcPayloadCallback;
 import com.jaeckel.direct.util.DirectionHelper;
 import com.jaeckel.direct.util.NotificationHelper;
-import de.greenrobot.event.EventBus;
 
 import java.util.Arrays;
+
+import de.greenrobot.event.EventBus;
 
 public class DirectActivity extends FragmentActivity implements ActionBar.TabListener, NfcPayloadCallback, DirectionHolder {
 
@@ -30,9 +32,9 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
     private static final String NFC_MIME_TYPE = "application/vdn.com.jaeckel.direct.distribute";
     private static final String EXTRA_ACTIVATED = "EXTRA_ACTIVATED";
     private static final String EXTRA_ASSIGNED = "EXTRA_ASSIGNED";
+    private static boolean[] assigned = new boolean[8];
     private ViewPager viewPager;
     private DirectionPagerAdapter directionPagerAdapter;
-    private static boolean[] assigned = new boolean[8];
     private EventBus bus;
 
     @Override
@@ -113,13 +115,8 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
 
     @Override
     public void onBackPressed() {
-        if (viewPager.getCurrentItem() == 0) {
-            super.onBackPressed();
-        } else {
-            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        }
+        super.onBackPressed();
     }
-
 
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
         viewPager.setCurrentItem(tab.getPosition());
