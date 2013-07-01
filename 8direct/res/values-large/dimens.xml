@@ -14,6 +14,6 @@
     </dimen>
     <dimen
             name="octant_text_size"
-            >160sp
+            >180sp
     </dimen>
 </resources>

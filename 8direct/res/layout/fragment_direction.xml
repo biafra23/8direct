@@ -33,12 +33,12 @@
 
         <TextView
                 android:id="@+id/direction_short"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
                 android:gravity="center"
-                android:textSize="200sp"
+                android:textSize="@dimen/octant_text_size"
                 android:text="NW"
                 android:textAllCaps="true"
                 />
