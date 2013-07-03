@@ -21,7 +21,7 @@ public class NotificationHelper {
 
         if (activated) {
             NotificationCompat.Builder b = new NotificationCompat.Builder(App.getInstance());
-            b.setAutoCancel(false).setDefaults(Notification.DEFAULT_ALL)
+            b.setAutoCancel(false).setDefaults(Notification.DEFAULT_SOUND)
                     .setWhen(System.currentTimeMillis());
             b.setContentTitle("Your direction is " + DirectionHelper.getLongDirection(direction))
                     .setContentText("Deploy your resonator here")
