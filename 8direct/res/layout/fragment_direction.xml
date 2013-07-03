@@ -20,80 +20,92 @@
         >
 
 
-    <RelativeLayout
+    <LinearLayout
             android:layout_marginTop="@dimen/card_margin_vertical"
             android:layout_marginBottom="@dimen/card_margin_vertical"
             android:layout_marginLeft="@dimen/card_margin_horizontal"
             android:layout_marginRight="@dimen/card_margin_horizontal"
             android:id="@+id/container"
+            android:orientation="vertical"
             android:background="@drawable/draw_bgbox_black"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
 
-        <TextView
-                android:id="@+id/direction_short"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textSize="@dimen/octant_text_size"
-                android:text="NW"
-                android:textAllCaps="true"
-                />
-
-
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/direction_short"
-                android:orientation="horizontal"
-                android:layout_marginTop="-32dp"
+                android:layout_height="0dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:gravity="center_horizontal">
-
-            <ImageView
-                    android:id="@+id/portals"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
-                    android:src="@drawable/portal_e"
-                    android:contentDescription="portals"
-                    android:visibility="invisible"
-                    android:layout_centerInParent="true"
-                    android:layout_above="@+id/underline"
-                    />
+                android:layout_weight="1"
+                android:gravity="center">
 
             <TextView
-                    android:id="@+id/direction_description"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/direction_short"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:textSize="16sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:textSize="@dimen/octant_text_size"
+                    android:text="NW"
                     android:textAllCaps="true"
-                    android:text="north"
                     />
+
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/direction_short"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="-32dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:gravity="center_horizontal">
+
+                <ImageView
+                        android:id="@+id/portals"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:src="@drawable/portal_e"
+                        android:contentDescription="portals"
+                        android:visibility="invisible"
+                        android:layout_centerInParent="true"
+                        android:layout_above="@+id/underline"
+                        />
+
+                <TextView
+                        android:id="@+id/direction_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:textSize="16sp"
+                        android:textAllCaps="true"
+                        android:text="north"
+                        />
+            </LinearLayout>
         </LinearLayout>
 
-        <ImageView
-                android:id="@+id/underline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/underline"
-                android:contentDescription="divider"
-                android:layout_above="@+id/buttonBar"
-                />
 
         <RelativeLayout
                 android:id="@+id/buttonBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:id="@+id/underline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/underline"
+                    android:contentDescription="divider"
+                    />
 
             <Button
                     android:id="@+id/activate"
+                    android:layout_below="@+id/underline"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:text="@string/activate"
@@ -104,6 +116,7 @@
 
             <Button
                     android:id="@+id/deactivate"
+                    android:layout_below="@+id/underline"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:text="@string/deactivate"
@@ -113,5 +126,5 @@
                     android:visibility="gone"
                     />
         </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>
