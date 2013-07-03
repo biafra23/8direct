@@ -106,7 +106,8 @@
             <Button
                     android:id="@+id/activate"
                     android:layout_below="@+id/underline"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:text="@string/activate"
                     android:textColor="@color/text_highlighted"
@@ -117,7 +118,8 @@
             <Button
                     android:id="@+id/deactivate"
                     android:layout_below="@+id/underline"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:text="@string/deactivate"
                     android:textColor="@color/text_highlighted"
