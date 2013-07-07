@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.jaeckel.direct.App;
 import com.jaeckel.direct.DirectionHolder;
 import com.jaeckel.direct.R;
-import com.jaeckel.direct.event.ClearDirectionEvent;
+import com.jaeckel.direct.event.DirectionChangedEvent;
 import com.jaeckel.direct.util.DirectionHelper;
 
 import de.greenrobot.event.EventBus;
@@ -125,6 +125,10 @@ public class DirectionFragment extends Fragment
    public void updateView()
    {
       View rootView = getView();
+      if (rootView == null)
+      {
+         return;
+      }
       ImageView mPortals = (ImageView) rootView.findViewById(R.id.portals);
       TextView mShortDirection = (TextView) rootView.findViewById(R.id.direction_short);
       TextView mLongDirection = (TextView) rootView.findViewById(R.id.direction_description);
@@ -157,13 +161,13 @@ public class DirectionFragment extends Fragment
     * 
     * @param event
     */
-   public void onEvent(ClearDirectionEvent event)
+   public void onEvent(DirectionChangedEvent event)
    {
 
       Log.d(App.TAG, "event." + event.getDirection());
       if (event.getDirection() == DirectionHelper.directionToInt(direction))
       {
-         setActivated(false);
+         updateView();
       }
    }
 

@@ -8,12 +8,12 @@
     </style>
 
     <style name="directActionBarTabStyle" parent="android:Widget.ActionBar.TabBar">
-        <item name="android:showDividers">middle</item>
-        <item name="android:divider">@color/background</item>
+        <item name="android:showDividers">none</item>
+        <item name="android:divider">@null</item>
     </style>
 
     <style name="directActionBarTabStyle" parent="android:Widget.ActionBar.TabView">
-        <item name="android:background">@drawable/direction_tab</item>
+        <item name="android:background">@color/background</item>
     </style>
 
 </resources>

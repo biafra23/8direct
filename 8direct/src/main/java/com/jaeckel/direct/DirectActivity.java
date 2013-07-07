@@ -12,14 +12,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jaeckel.direct.adapters.DirectionPagerAdapter;
+import com.jaeckel.direct.event.DirectionChangedEvent;
 import com.jaeckel.direct.fragments.DirectionFragment;
 import com.jaeckel.direct.nfc.DistributionNfc;
 import com.jaeckel.direct.nfc.DistributionNfc.NfcPayloadCallback;
 import com.jaeckel.direct.util.DirectionHelper;
 import com.jaeckel.direct.util.NotificationHelper;
+
+import de.greenrobot.event.EventBus;
 
 public class DirectActivity extends FragmentActivity implements ActionBar.TabListener, NfcPayloadCallback
 {
@@ -37,6 +41,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
    protected void onCreate(Bundle savedInstanceState)
    {
       super.onCreate(savedInstanceState);
+      EventBus.getDefault().register(this);
 
       setContentView(R.layout.activity_direct);
 
@@ -78,10 +83,29 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
          });
       for (int i = 0; i < directionPagerAdapter.getCount(); i++)
       {
-         actionBar.addTab(actionBar.newTab().setText(directionPagerAdapter.getPageTitle(i)).setTabListener(this));
+
+         Tab tab = buildTab(i);
+         actionBar.addTab(tab);
       }
 
       DistributionNfc.registerNfcMessageCallback(this, NFC_MIME_TYPE, this);
+   }
+
+   private Tab buildTab(int direction)
+   {
+      Tab tab = getActionBar().newTab();
+      CharSequence title = directionPagerAdapter.getPageTitle(direction);
+      tab.setText(title).setTabListener(this);
+      if (holder.isActivated(direction))
+      {
+         tab.setCustomView(R.layout.tab_activated);
+      }
+      else
+      {
+         tab.setCustomView(R.layout.tab_deactivated);
+      }
+      ((TextView) tab.getCustomView().findViewById(R.id.tab_title)).setText(tab.getText());
+      return tab;
    }
 
    @Override
@@ -166,4 +190,17 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       return "DirectActivity [activated=" + Arrays.toString(holder.getActivated()) + "]";
    }
 
+   /**
+    * Called by EventBus
+    * 
+    * @param event
+    */
+   public void onEvent(DirectionChangedEvent event)
+   {
+      Log.d(App.TAG, "event." + event.getDirection());
+      Tab tab = getActionBar().getTabAt(event.getDirection());
+      getActionBar().addTab(buildTab(event.getDirection()), event.getDirection());
+      getActionBar().removeTab(tab);
+
+   }
 }

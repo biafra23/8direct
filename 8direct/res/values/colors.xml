@@ -5,8 +5,11 @@
     <color name="text_highlighted">#32b4e5</color>
     <color name="text">#FFFFFF</color>
     <color name="text_30">#4CFFFFFF</color>
-    <color name="tab_indicator_unselected">#4CFFFFFF</color>
-    <color name="tab_indicator_selected">#FFFFFF</color>
-    <color name="tab_indicator_unselected_checked">#4C32b4e5</color>
-    <color name="tab_indicator_selected_checked">#32b4e5</color>
+    
+    <color name="tab_indicator_deactivated_unselected">#464646</color>
+    <color name="tab_indicator_deactivated_selected">#808080</color>
+    <color name="tab_indicator_activated_unselected">#B232B4E5</color>
+    <color name="tab_indicator_activated_selected">#32b4e5</color>
+    
+    
 </resources>
