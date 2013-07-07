@@ -117,11 +117,6 @@ public class DirectionFragment extends Fragment
 
    }
 
-   public void notifyDataSetChanged()
-   {
-      updateView();
-   }
-
    public void updateView()
    {
       View rootView = getView();
