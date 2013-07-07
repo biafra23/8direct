@@ -42,9 +42,15 @@ public class App extends Application implements DirectionHolder
       return activated;
    }
 
+   @Override
    public void setActivated(boolean[] activated)
    {
       this.activated = activated;
+      for (int i = 0; i < activated.length; i++)
+      {
+
+         NotificationHelper.raiseNotification(DirectionHelper.directionToString(i), activated[i]);
+      }
    }
 
    @Override

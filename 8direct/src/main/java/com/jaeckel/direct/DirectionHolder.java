@@ -8,4 +8,7 @@ public interface DirectionHolder
 
    void setActivated(String direction, boolean activated);
 
+   void setActivated(boolean[] activated);
+
+   boolean[] getActivated();
 }

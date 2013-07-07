@@ -31,6 +31,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
    private static final String EXTRA_ACTIVATED = "EXTRA_ACTIVATED";
    private ViewPager viewPager;
    private DirectionPagerAdapter directionPagerAdapter;
+   private DirectionHolder holder = null;
 
    @Override
    protected void onCreate(Bundle savedInstanceState)
@@ -39,35 +40,26 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
 
       setContentView(R.layout.activity_direct);
 
+      holder = App.getInstance();
+
       Log.d(App.TAG, "DirectActivity");
 
       Intent intent = getIntent();
       if (intent.hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES))
       {
          boolean[] payload = (boolean[]) DistributionNfc.readNfcMessage(intent, NFC_MIME_TYPE);
-         App.getInstance().setActivated(new boolean[8]);
-         //            assigned = payload;
-         App.getInstance().setActivated(payload);
-         for (int i = 0; i < payload.length; i++)
-         {
-
-            NotificationHelper.raiseNotification(DirectionHelper.directionToString(i), payload[i]);
-
-         }
-
+         holder.setActivated(payload);
       }
       else if (savedInstanceState != null)
       {
-         App.getInstance().setActivated(savedInstanceState.getBooleanArray(EXTRA_ACTIVATED));
-         //            assigned = savedInstanceState.getBooleanArray(EXTRA_ASSIGNED);
-
+         holder.setActivated(savedInstanceState.getBooleanArray(EXTRA_ACTIVATED));
       }
       else
       {
-         App.getInstance().setActivated(new boolean[8]);
+         holder.setActivated(new boolean[8]);
       }
       Log.d(App.TAG, "onCreate: " + toString());
-      directionPagerAdapter = new DirectionPagerAdapter(getSupportFragmentManager(), getResources(), App.getInstance());
+      directionPagerAdapter = new DirectionPagerAdapter(getSupportFragmentManager(), getResources(), holder);
 
       final ActionBar actionBar = getActionBar();
       actionBar.setHomeButtonEnabled(false);
@@ -92,27 +84,11 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       DistributionNfc.registerNfcMessageCallback(this, NFC_MIME_TYPE, this);
    }
 
-   /**
-    * Dispatch onResume() to fragments.
-    */
-   @Override
-   protected void onResume()
-   {
-      super.onResume();
-
-   }
-
    @Override
    protected void onSaveInstanceState(Bundle outState)
    {
       super.onSaveInstanceState(outState);
-      outState.putBooleanArray(EXTRA_ACTIVATED, App.getInstance().getActivated());
-   }
-
-   @Override
-   public void onBackPressed()
-   {
-      super.onBackPressed();
+      outState.putBooleanArray(EXTRA_ACTIVATED, holder.getActivated());
    }
 
    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft)
@@ -135,7 +111,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
    @Override
    public Object preparePayload()
    {
-      boolean[] payload = App.getInstance().getActivated().clone();
+      boolean[] payload = holder.getActivated().clone();
       boolean transfer = false;
       for (int i = 0; i < 8; i++)
       {
@@ -146,7 +122,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
          }
       }
       Log.d(App.TAG, "My current: " + Arrays.toString(payload));
-      Log.d(App.TAG, "My shared : " + Arrays.toString(App.getInstance().getActivated()));
+      Log.d(App.TAG, "My shared : " + Arrays.toString(holder.getActivated()));
       return payload;
    }
 
@@ -168,7 +144,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
                   }
                   else
                   {
-                     App.getInstance().getActivated()[i] = true;
+                     holder.getActivated()[i] = true;
                      NotificationHelper.raiseNotification(DirectionHelper.directionToString(i), true);
                   }
 
@@ -187,7 +163,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
    @Override
    public String toString()
    {
-      return "DirectActivity [activated=" + Arrays.toString(App.getInstance().getActivated()) + "]";
+      return "DirectActivity [activated=" + Arrays.toString(holder.getActivated()) + "]";
    }
 
 }
