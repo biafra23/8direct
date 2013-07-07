@@ -8,7 +8,4 @@ public interface DirectionHolder
 
    void setActivated(String direction, boolean activated);
 
-   boolean isAssignedToMe(String direction);
-
-   boolean isAssignedToMe(int position);
 }
