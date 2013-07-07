@@ -117,6 +117,11 @@ public class DirectionFragment extends Fragment
 
    }
 
+   public void notifyDataSetChanged()
+   {
+      updateView();
+   }
+
    public void updateView()
    {
       View rootView = getView();
@@ -158,8 +163,6 @@ public class DirectionFragment extends Fragment
     */
    public void onEvent(DirectionChangedEvent event)
    {
-
-      Log.d(App.TAG, "event." + event.getDirection());
       if (event.getDirection() == DirectionHelper.directionToInt(direction))
       {
          updateView();

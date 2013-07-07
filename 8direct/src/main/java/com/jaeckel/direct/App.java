@@ -1,7 +1,6 @@
 package com.jaeckel.direct;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.jaeckel.direct.event.DirectionChangedEvent;
 import com.jaeckel.direct.util.DirectionHelper;
@@ -91,7 +90,6 @@ public class App extends Application implements DirectionHolder
     */
    public void onEvent(DirectionChangedEvent event)
    {
-      Log.d(App.TAG, "event." + event.getDirection());
       activated[event.getDirection()] = event.isActivated();
    }
 }

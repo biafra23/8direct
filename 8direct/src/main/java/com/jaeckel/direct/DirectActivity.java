@@ -186,7 +186,6 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
     */
    public void onEvent(DirectionChangedEvent event)
    {
-      Log.d(App.TAG, "event." + event.getDirection());
       Tab tab = getActionBar().getTabAt(event.getDirection());
       getActionBar().addTab(buildTab(event.getDirection()), event.getDirection());
       getActionBar().removeTab(tab);
