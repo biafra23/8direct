@@ -41,10 +41,8 @@ public class NotificationHelper
       }
       else
       {
-
          NotificationManager mgr = (NotificationManager) App.getInstance().getSystemService(Service.NOTIFICATION_SERVICE);
          mgr.cancel(DirectionHelper.directionToInt(direction));
-
       }
 
    }

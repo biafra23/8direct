@@ -1,6 +1,9 @@
 package com.jaeckel.direct;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 
 import com.jaeckel.direct.event.DirectionChangedEvent;
 import com.jaeckel.direct.util.DirectionHelper;
@@ -26,6 +29,11 @@ public class App extends Application implements DirectionHolder
    public void onCreate()
    {
       super.onCreate();
+      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+      for (int i = 0; i < activated.length; i++)
+      {
+         activated[i] = prefs.getBoolean(Integer.toString(i), false);
+      }
       instance = this;
       bus = EventBus.getDefault();
       bus.register(this);
@@ -92,5 +100,8 @@ public class App extends Application implements DirectionHolder
    public void onEvent(DirectionChangedEvent event)
    {
       activated[event.getDirection()] = event.isActivated();
+      Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
+      edit.putBoolean(Integer.toString(event.getDirection()), event.isActivated());
+      edit.apply();
    }
 }
