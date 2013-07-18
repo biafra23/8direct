@@ -30,7 +30,6 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
     * <code>MIME_TYPE</code> indicates/is used for.
     */
    private static final String NFC_MIME_TYPE = "application/vdn.com.jaeckel.direct.distribute";
-   private static final String EXTRA_ACTIVATED = "EXTRA_ACTIVATED";
    private ViewPager viewPager;
    private DirectionPagerAdapter directionPagerAdapter;
    private DirectionHolder holder = null;
@@ -47,20 +46,7 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
 
       Log.d(App.TAG, "DirectActivity");
 
-      Intent intent = getIntent();
-      if (intent.hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES))
-      {
-         boolean[] payload = (boolean[]) DistributionNfc.readNfcMessage(intent, NFC_MIME_TYPE);
-         holder.setActivated(payload);
-      }
-      else if (savedInstanceState != null)
-      {
-         holder.setActivated(savedInstanceState.getBooleanArray(EXTRA_ACTIVATED));
-      }
-      else
-      {
-         holder.setActivated(new boolean[8]);
-      }
+      extractNfcMessage(getIntent());
       Log.d(App.TAG, "onCreate: " + toString());
       directionPagerAdapter = new DirectionPagerAdapter(getSupportFragmentManager(), getResources(), holder);
 
@@ -89,6 +75,27 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       DistributionNfc.registerNfcMessageCallback(this, NFC_MIME_TYPE, this);
    }
 
+   /*
+    * (non-Javadoc)
+    * @see android.support.v4.app.FragmentActivity#onNewIntent(android.content.Intent)
+    */
+   @Override
+   protected void onNewIntent(Intent intent)
+   {
+      super.onNewIntent(intent);
+      extractNfcMessage(intent);
+   }
+
+   private void extractNfcMessage(Intent intent)
+   {
+      if (intent != null && intent.hasExtra(NfcAdapter.EXTRA_NDEF_MESSAGES))
+      {
+         boolean[] payload = (boolean[]) DistributionNfc.readNfcMessage(intent, NFC_MIME_TYPE);
+         holder.setActivated(payload);
+         Log.d(App.TAG, "didReceivePayload: " + DirectActivity.this.toString());
+      }
+   }
+
    private Tab buildTab(int direction)
    {
       Tab tab = getActionBar().newTab();
@@ -104,13 +111,6 @@ public class DirectActivity extends FragmentActivity implements ActionBar.TabLis
       }
       ((TextView) tab.getCustomView().findViewById(R.id.tab_title)).setText(tab.getText());
       return tab;
-   }
-
-   @Override
-   protected void onSaveInstanceState(Bundle outState)
-   {
-      super.onSaveInstanceState(outState);
-      outState.putBooleanArray(EXTRA_ACTIVATED, holder.getActivated());
    }
 
    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft)

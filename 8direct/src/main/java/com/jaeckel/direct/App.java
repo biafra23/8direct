@@ -47,8 +47,9 @@ public class App extends Application implements DirectionHolder
       this.activated = activated;
       for (int i = 0; i < activated.length; i++)
       {
-
-         NotificationHelper.raiseNotification(DirectionHelper.directionToString(i), activated[i]);
+         boolean state = activated[i];
+         NotificationHelper.raiseNotification(DirectionHelper.directionToString(i), state);
+         bus.post(new DirectionChangedEvent(i, state));
       }
    }
 
